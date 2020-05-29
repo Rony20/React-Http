@@ -1,16 +1,18 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
-import axios from 'axios'
-import "./Posts.css"
-import Post from "../../../components/Post/Post"
+import axios from "axios";
+import "./Posts.css";
+import Post from "../../../components/Post/Post";
 
 class Posts extends Component {
   state = {
     posts: [],
+    loading: false
   };
 
   componentDidMount() {
-      console.log(this.props)
+      this.setState({loading: true})
     axios
       .get("https://jsonplaceholder.typicode.com/posts")
       .then((response) => {
@@ -26,7 +28,9 @@ class Posts extends Component {
       .catch((error) => {
         // this.setState({ error: true });
         console.log(error);
-      });
+      }).finally(() => {
+          this.setState({loading: false})
+      })
   }
 
   postSelectedHandler = (id) => {
@@ -34,16 +38,17 @@ class Posts extends Component {
   };
 
   render() {
-    let posts = <p style={{ textAlign: "center" }}>Something went wrong !</p>;
-    if (!this.state.error) {
+    let posts = <p style={{ textAlign: "center" }}>Loading...!</p>;
+    if (!this.state.loading) {
       posts = this.state.posts.map((post) => {
         return (
-          <Post
-            title={post.title}
-            author={post.author}
-            key={post.id}
-            clicked={() => this.postSelectedHandler(post.id)}
-          />
+          <Link to={"/" + post.id} key={post.id}>
+            <Post
+              title={post.title}
+              author={post.author}
+              clicked={() => this.postSelectedHandler(post.id)}
+            />
+          </Link>
         );
       });
     }
@@ -51,4 +56,4 @@ class Posts extends Component {
   }
 }
 
-export default Posts
+export default Posts;
