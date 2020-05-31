@@ -9,7 +9,7 @@ class NewPost extends Component {
     title: "",
     content: "",
     author: "Max",
-    submitted: false,
+    // submitted: false,
   };
 
   componentDidMount() {
@@ -29,7 +29,8 @@ class NewPost extends Component {
       )
       .then((response) => {
         console.log(response);
-        this.setState({ submitted: true });
+        this.props.history.push('/posts')
+        // this.setState({ submitted: true });
       });
   };
 
