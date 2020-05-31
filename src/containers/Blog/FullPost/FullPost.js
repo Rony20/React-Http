@@ -9,14 +9,24 @@ class FullPost extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props)
+    this.loadData();
+  }
+
+  componentDidUpdate() {
+    this.loadData();
+  }
+
+  loadData() {
     if (this.props.match.params.id) {
       if (
         !this.state.loadedPost ||
-        (this.state.loadedPost && this.state.loadedPost.id !== this.props.id)
+        (this.state.loadedPost && this.state.loadedPost.id !== +this.props.match.params.id) //Here '+' is for converting this.props.amtch.params.id into int
       ) {
         axios
-          .get("https://jsonplaceholder.typicode.com/posts/" + this.props.match.params.id)
+          .get(
+            "https://jsonplaceholder.typicode.com/posts/" +
+              this.props.match.params.id
+          )
           .then((response) => {
             this.setState({ loadedPost: response.data });
           })
@@ -27,10 +37,13 @@ class FullPost extends Component {
 
   deletePostHandler = () => {
     axios
-      .delete("https://cors-anywhere.herokuapp.com/https://jsonplaceholder.typicode.com/posts/" + this.props.match.params.id)
+      .delete(
+        "https://cors-anywhere.herokuapp.com/https://jsonplaceholder.typicode.com/posts/" +
+          this.props.match.params.id
+      )
       .then((response) => console.log(response))
       .catch((error) => console.log(error));
-  }
+  };
 
   render() {
     let post = <p style={{ textAlign: "center" }}>Please select a Post!</p>;
